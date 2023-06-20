@@ -4,6 +4,11 @@ resource "aws_instance" "web" {
   user_data              = file("install_webserver.sh")
   vpc_security_group_ids = [aws_security_group.allow_http.id]
   subnet_id              = module.vpc.public_subnets[0]
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "optional"
+  }
   tags = {
     Name       = "HelloWorld"
     Costcenter = "666"
