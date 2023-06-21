@@ -4,6 +4,10 @@ resource "aws_launch_configuration" "launch_config" {
   instance_type   = "t3.micro"
   security_groups = [aws_security_group.allow_http.id]
   user_data       = file("install_webserver.sh")
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "optional"
+  }
 
   lifecycle {
     create_before_destroy = true
