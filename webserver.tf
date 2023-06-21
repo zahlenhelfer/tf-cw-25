@@ -1,9 +1,11 @@
 resource "aws_instance" "web" {
+  count                  = 3
   ami                    = "ami-0b2ac948e23c57071"
   instance_type          = "t3.micro"
   user_data              = file("install_webserver.sh")
   vpc_security_group_ids = [aws_security_group.allow_http.id]
   subnet_id              = module.vpc.public_subnets[0]
+  monitoring             = true
 
   metadata_options {
     http_endpoint = "enabled"
@@ -12,6 +14,7 @@ resource "aws_instance" "web" {
   tags = {
     Name       = "HelloWorld"
     Costcenter = "666"
+    AutoOff    = "True"
   }
 }
 
