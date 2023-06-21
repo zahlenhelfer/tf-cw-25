@@ -4,7 +4,7 @@ resource "aws_instance" "web" {
   instance_type          = "t3.micro"
   user_data              = file("install_webserver.sh")
   vpc_security_group_ids = [aws_security_group.allow_http.id]
-  subnet_id              = module.vpc.public_subnets[0]
+  subnet_id              = module.vpc.public_subnets[count.index % length(module.vpc.public_subnets)]
   monitoring             = true
 
   metadata_options {
