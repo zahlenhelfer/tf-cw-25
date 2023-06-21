@@ -1,5 +1,5 @@
 resource "aws_instance" "web" {
-  count                  = 3
+  count                  = var.instance_count
   ami                    = "ami-0b2ac948e23c57071"
   instance_type          = "t3.micro"
   user_data              = file("install_webserver.sh")
@@ -12,7 +12,7 @@ resource "aws_instance" "web" {
     http_tokens   = "optional"
   }
   tags = {
-    Name       = "HelloWorld"
+    Name       = "Webserver-${count.index + 1}"
     Costcenter = "666"
     AutoOff    = "True"
   }
@@ -31,11 +31,10 @@ resource "aws_security_group" "allow_http" {
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
